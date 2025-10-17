@@ -1,0 +1,36 @@
+procedure SOLVE_N_QUEENS(n):
+    result ← empty list
+    board ← n x n grid filled with '.'
+
+    // columns, main diagonals, and anti-diagonals trackers
+    cols ← array[n] of false
+    diag1 ← array[2n] of false    // (row - col + n)
+    diag2 ← array[2n] of false    // (row + col)
+
+    CALL backtrack(row = 0)
+
+    return result
+
+
+procedure backtrack(row):
+    if row == n:
+        // All queens are placed safely
+        add a copy of board to result
+        return
+
+    for col from 0 to n-1:
+        if cols[col] == false AND diag1[row - col + n] == false AND diag2[row + col] == false:
+            // Place queen
+            board[row][col] ← 'Q'
+            cols[col] ← true
+            diag1[row - col + n] ← true
+            diag2[row + col] ← true
+
+            // Move to next row
+            backtrack(row + 1)
+
+            // Backtrack (remove queen)
+            board[row][col] ← '.'
+            cols[col] ← false
+            diag1[row - col + n] ← false
+            diag2[row + col] ← false
