@@ -1,0 +1,40 @@
+FUNCTION findPath(grid):
+    n ← size of grid
+    result ← empty list of strings
+
+    IF grid[0][0] == 0 THEN
+        RETURN result      // start cell blocked, no path possible
+
+    visited ← 2D array of size n x n initialized to 0
+    visited[0][0] ← 1
+
+    CALL solve(0, 0, grid, n, "", result, visited)
+
+    SORT result in lexicographical order (optional)
+    RETURN result
+END FUNCTION
+
+
+FUNCTION solve(x, y, grid, n, path, result, visited):
+    // Base case: reached destination
+    IF x == n - 1 AND y == n - 1 THEN
+        ADD path TO result
+        RETURN
+
+    // Define 4 possible moves
+    directions ← [("D", +1, 0), ("L", 0, -1), ("R", 0, +1), ("U", -1, 0)]
+
+    FOR each (dirChar, dx, dy) IN directions:
+        newX ← x + dx
+        newY ← y + dy
+
+        // Check if new cell is within bounds and open
+        IF newX IN [0, n-1] AND newY IN [0, n-1] AND
+           grid[newX][newY] == 1 AND visited[newX][newY] == 0 THEN
+
+            visited[newX][newY] ← 1          // mark as visited
+            CALL solve(newX, newY, grid, n, path + dirChar, result, visited)
+            visited[newX][newY] ← 0          // backtrack
+        END IF
+    END FOR
+END FUNCTION
