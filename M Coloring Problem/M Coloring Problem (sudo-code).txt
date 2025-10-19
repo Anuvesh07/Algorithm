@@ -1,0 +1,45 @@
+FUNCTION graphColoring(edges, m, n):
+    # Build adjacency list
+    adj = list of n empty lists
+    FOR each edge (u, v) in edges:
+        add v to adj[u]
+        add u to adj[v]
+
+    color = array of size n, initialized to 0
+
+    RETURN solve(node = 0, adj, m, n, color)
+END FUNCTION
+
+
+FUNCTION solve(node, adj, m, n, color):
+    # Base Case: All vertices are colored
+    IF node == n:
+        RETURN true
+
+    # Try all possible colors
+    FOR col FROM 1 TO m:
+        IF isSafe(node, adj, color, col) == true:
+            color[node] = col        # Assign color
+
+            # Recur for next vertex
+            IF solve(node + 1, adj, m, n, color) == true:
+                RETURN true
+
+            color[node] = 0          # Backtrack (undo assignment)
+
+    RETURN false                     # No valid color found
+END FUNCTION
+
+
+FUNCTION isSafe(node, adj, color, col):
+    FOR each neighbor in adj[node]:
+        IF color[neighbor] == col:
+            RETURN false             # Adjacent vertex has same color
+    RETURN true                      # Safe to assign this color
+END FUNCTION
+
+
+
+
+
+// this algo was mentioned in my university or rather i should say in my collages sessional exam (Graph theory) 
