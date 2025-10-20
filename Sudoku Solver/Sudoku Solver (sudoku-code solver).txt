@@ -1,0 +1,62 @@
+FUNCTION solveSudoku(board):
+    CALL solve(board)
+END FUNCTION
+
+
+FUNCTION solve(board):
+    FOR each row from 0 to 8:
+        FOR each col from 0 to 8:
+            
+            IF board[row][col] == '.' THEN
+                // Found an empty cell
+
+                FOR each digit c from '1' to '9':
+                    IF isValid(board, row, col, c) == TRUE THEN
+                        // Place the digit temporarily
+                        board[row][col] = c
+
+                        // Recur to solve the rest of the board
+                        IF solve(board) == TRUE THEN
+                            RETURN TRUE   // Puzzle solved successfully
+
+                        // Undo the choice (backtrack)
+                        board[row][col] = '.'
+                    END IF
+                END FOR
+
+                // No valid digit found → must backtrack
+                RETURN FALSE
+            END IF
+
+        END FOR
+    END FOR
+
+    // If no empty cells remain, board is solved
+    RETURN TRUE
+END FUNCTION
+
+
+FUNCTION isValid(board, row, col, c):
+    FOR i from 0 to 8:
+        // Check row
+        IF board[row][i] == c THEN
+            RETURN FALSE
+
+        // Check column
+        IF board[i][col] == c THEN
+            RETURN FALSE
+
+        // Check 3x3 subgrid
+        subRow = 3 * (row / 3) + (i / 3)
+        subCol = 3 * (col / 3) + (i % 3)
+        IF board[subRow][subCol] == c THEN
+            RETURN FALSE
+    END FOR
+
+    // Safe to place the number
+    RETURN TRUE
+END FUNCTION
+
+
+
+// don't know how to solve a sudoku (every time you see a newspaper) then learn to solve it............ {https://www.youtube.com/watch?v=OtKxtvMUahA}
